@@ -172,10 +172,12 @@ app.get('/', (req, res) => {
     res.send('TOP 10 ANIME MOVIES. NOT BY WATCHMOJO.');
 });
 
+// Get all Movies
 app.get('/movies', (req, res) => {
     res.status(200).json(movies);
 });
 
+// Find movie by Title
 app.get('/movies/:title', (req, res) => {
     const { title } = req.params;
     const movie = movies.find( movie => movie.title === title);
@@ -187,6 +189,7 @@ app.get('/movies/:title', (req, res) => {
     }
 });
 
+// Get Genre Data
 app.get('/movies/genre/:genreName', (req, res) => {
     const { genreName } = req.params;
     const genre = movies.find( movie => movie.genre.name === genreName).genre;
@@ -198,6 +201,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
     }
 })
 
+// Get Director Data
 app.get('/movies/directors/:directorName', (req, res) => {
     const { directorName } = req.params;
     const director = movies.find( movie => movie.director.name === directorName).director;
@@ -209,10 +213,10 @@ app.get('/movies/directors/:directorName', (req, res) => {
     }
 })
 
+// Documentation
 app.get('/documentation', (req, res) => {
     res.sendFile('public/documentation.html', { root: __dirname });
 });
-
 
 // Create New Users
 app.post('/users', (req, res) => {
