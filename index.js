@@ -88,6 +88,21 @@ app.get('/movies', (req, res) => {
     res.json(topMovies);
 });
 
+app.get('/movies/:title', (req, res) => {
+    res.json(topMovies.find( (movie) => {
+        return movie.title === req.params.title
+    }));
+})
+
+app.get('/movies/:title/genre', (req, res) => {
+    res.json(topMovies.find( (movie) => {
+        return movie.title === req.params.title
+    }).genre);
+})
+
+app.get('/movies/:director', (req, res) => {
+})
+
 app.get('/documentation', (req, res) => {
     res.sendFile('public/documentation.html', { root: __dirname });
 });
