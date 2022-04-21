@@ -8,7 +8,7 @@
     <style>
         table {
             text-align: center;
-            border-spacing: 30px 5px;
+            border-spacing: 30px 10px;
         }
     </style>
 </head>
@@ -24,7 +24,9 @@
             <th>URL Endpoint</th>
             <th>HTTP Method</th>
             <th>Request Body Data Format</th>
+            <th>Request Body Data Example</th>
             <th>Response Body Data Format</th>
+            <th>Response Body Data Example</th>
         </thead>
         <tbody>
             <tr>
@@ -32,71 +34,134 @@
                 <td>/movies</td>
                 <td>GET</td>
                 <td>None</td>
+                <td></td>
                 <td>JSON object with all movies</td>
+                <td>
+                    { "_id": "625f4adc03d0dfbe2f8f2f41", <br> 
+                    "Title": "PERSONA 3 THE MOVIE 4 - Winter of Rebirth", <br>
+                    "Genre": [ "625f6a1603d0dfbe2f8f2f51" ], <br>
+                    "Director": [ "625f6c5103d0dfbe2f8f2f5b" ] } ...
+                </td>
             </tr>
             <tr>
                 <td>Return data about a single movie by title</td>
                 <td>/movies/:title</td>
                 <td>GET</td>
                 <td>None</td>
+                <td></td>
                 <td>JSON object with data about a single movie</td>
+                <td>
+                    { "_id": "625f53e803d0dfbe2f8f2f4a"
+                    "Title": "Belle", <br>
+                    "Genre": [ "625f6ace03d0dfbe2f8f2f55" ], <br>
+                    "Director": [ "625f6bbe03d0dfbe2f8f2f57" ] }
+                </td>
             </tr>
             <tr>
                 <td>Return data about a genre</td>
                 <td>/movies/genre/:genreName</td>
                 <td>GET</td>
                 <td>None</td>
+                <td></td>
                 <td>JSON with data on the genre</td>
+                <td>
+                    { "_id": "625f6a1603d0dfbe2f8f2f51", <br>
+                    "Name" : "Fantasy", <br>
+                    "Description" : "A genre in which a plot cannot occur in the real world. The plot usually involves witchcraft or magic."
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Return data about a director by their name</td>
                 <td>/movies/directors/:direrctorName</td>
                 <td>GET</td>
                 <td>None</td>
+                <td></td>
                 <td>JSON object with data about the director</td>
+                <td>
+                    { "_id": "62609c4099e21fbd1aa1c1bc", <br>
+                        "Name" : "Yasuhiro Takemoto", <br>
+                        "Birth" : "1972", <br>
+                        "Death" : "2019"
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Register new user</td>
                 <td>/users</td>
                 <td>POST</td>
-                <td>JSON</td>
-                <td>JSON object about the user, along with an ID</td>
+                <td>JSON Object</td>
+                <td>
+                    { "Username": "dandanmania", <br>
+                    "Password": "anordinarypassword", <br>
+                    "Email": "imaginaryemail1@gmail.com", <br>
+                    "Birthday": "1997-01-01" }
+                </td>
+                <td>JSON object about the user</td>
+                <td>
+                    { 
+                        "Username" : "dandanmania", <br>
+                        "Password" : "imaginarypassword1", <br>
+                        "Email" : "imaginaryemail1@gmail.com", <br>
+                        "Birthday" : "1997-01-01T00:00:00Z", <br>
+                        "FavoriteMovies" : [], <br>
+                        "_id" : ObjectId("625f559503d0dfbe2f8f2f4b"), <br>
+                        "__v": 0
+                    }
+                </td>
             </tr>
             <tr>
-                <td>Update User's Name</td>
-                <td>/users/:id</td>
+                <td>Update User's Info</td>
+                <td>/users/:username</td>
                 <td>PUT</td>
-                <td>None</td>
+                <td>JSON Object</td>
+                <td>
+                    { "Username": "abrandnewdandan", <br>
+                    "Password": "anordinarypassword", <br>
+                    "Email": "imaginaryemail1@gmail.com", <br>
+                    "Birthday": "1997-01-01" }
+                </td>
                 <td>JSON object with updated user data</td>
+                <td>
+                    { 
+                        "_id" : ObjectId("625f559503d0dfbe2f8f2f4b"), <br>
+                        "Username" : "abrandnewdandan", <br>
+                        "Password" : "imaginarypassword1", <br>
+                        "Email" : "imaginaryemail1@gmail.com", <br>
+                        "Birthday" : "1997-01-01T00:00:00Z", <br>
+                        "FavoriteMovies" : []
+                    }
+                </td>
             </tr>
             <tr>
                 <td>Add a movie to Favorites list</td>
-                <td>/users/:id/:movieTitle</td>
+                <td>/users/:username/movies/:movieTitle</td>
                 <td>POST</td>
                 <td>None</td>
+                <td></td>
                 <td>A text message indicating that the movie was added to favorites</td>
+                <td>"625f53e803d0dfbe2f8f2f4a has been added to dandanmania's Favorites."</td>
             </tr>
             <tr>
                 <td>Remove a movie from favorites</td>
-                <td>/users/:id/:movieTitle</td>
+                <td>/users/:username/movies/:movieTitle</td>
                 <td>DELETE</td>
                 <td>None</td>
+                <td></td>
                 <td>A text message indicating that the movie was deleted from favorites</td>
+                <td>"625f53e803d0dfbe2f8f2f4a has been deleted from dandanmania's Favorites."</td>
             </tr>
             <tr>
                 <td>Deregister a user</td>
-                <td>/users/:id</td>
+                <td>/users/:username</td>
                 <td>DELETE</td>
                 <td>None</td>
+                <td></td>
                 <td>Text message indicating that the user was removed</td>
+                <td>"dandanmania was deleted."</td>
             </tr>
         </tbody>
     </table>
-
-    <h2>Current Issues</h1>
-    <ul>
-        <li>All requests are case-sensitive. Will update that soon.</li>
-    </ul>
 
 </body>
 </html>
