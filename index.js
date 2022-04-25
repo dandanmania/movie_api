@@ -4,16 +4,33 @@ const express = require('express'),
     bodyParser = require('body-parser'),
     uuid = require('uuid'),
     mongoose = require('mongoose'),
-    Models = require('./models.js');
+    Models = require('./models.js'),
+    cors = require('cors');
 
 const app = express();
 const Genres = Models.Genre;
 const Directors = Models.Director;
 const Movies = Models.Movie;
 const Users = Models.User;
+const { check, validationResult } = require('express-validator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+//CORS
+app.use(cors());
+//let allowedOrigins = ['http://localhost:8080'];
+// app.use(cors({
+//     origin: (origin, callback) => {
+//         if(!origin) return callback(null, true);
+//         if(allowedOrigins.indexOf(origin) === -1) {
+//             let message = 'The CORS policy for this application doesn\'t allow access from origin ' + origin;
+//             return callback(new Error(message), false);
+//         }
+//         return callback(null, true);
+//     }
+// }));
+
 mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Importing Auth
@@ -237,7 +254,20 @@ app.get('/documentation', (req, res) => {
 });
 
 // Create New Users
-app.post('/users', (req, res) => {
+app.post('/users',
+    [
+        check('Username', 'Username is required').isLength({min: 5}),
+        check('Username',  'Username contains non-alphanumeric characters - not allowed').isAlphanumeric(),
+        check('Password', 'Password is required').not().isEmpty(),
+        check('Email', 'Email does not appear to be valid').isEmail()
+    ] ,(req, res) => {
+    
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array () });
+    }
+
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOne({ Username: req.body.Username })
         .then ((user) => {
             if (user) {
@@ -246,7 +276,7 @@ app.post('/users', (req, res) => {
                 Users
                     .create({
                         Username: req.body.Username,
-                        Password: req.body.Password,
+                        Password: hashedPassword,
                         Email: req.body.Email,
                         Birthday: req.body.Birthday
                     })
@@ -263,12 +293,25 @@ app.post('/users', (req, res) => {
 })
 
 // Update User Data
-app.put('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.put('/users/:username', passport.authenticate('jwt', { session: false }),
+    [
+        check('Username', 'Username is required').isLength({min: 5}),
+        check('Username', 'Username contains non-alphanumeric characters - not allowed').isAlphanumeric(),
+        check('Password', 'Password is required').not().isEmpty(),
+        check('Email', 'Email does not appear to be valid').isEmail()
+    ],
+    (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+    }
+    
+    let hashedPassword = Users.hashPassword(req.body.Password);
     Users.findOneAndUpdate( { Username: req.params.username }, {
         $set:
             {
                 Username: req.body.Username,
-                Password: req.body.Password,
+                Password: hashedPassword,
                 Email: req.body.Email,
                 Birthday: req.body.Birthday
             }
