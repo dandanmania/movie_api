@@ -160,6 +160,28 @@
                 <td>Text message indicating that the user was removed</td>
                 <td>"dandanmania was deleted."</td>
             </tr>
+            <tr>
+                <td>Login</td>
+                <td>/login</td>
+                <td>DELETE</td>
+                <td>None</td>
+                <td></td>
+                <td>JSON Object with User Details + JWT Token</td>
+                <td>
+                    {
+                        user: { <br>
+                            "Username" : "thedandanclone", <br>
+                            "Password" : "imaginarypassword", <br>
+                            "Email" : "imaginaryemail@gmail.com", <br>
+                            "Birthday" : "1997-01-01T00:00:00Z", <br>
+                            "FavoriteMovies" : [], <br>
+                            "_id" : ObjectId("625f559503d0dfbe2f8f2f4b"), <br>
+                            "__v": 0 <br>
+                        }, <br>
+                        "token": "" <br>
+                    }
+                </td>
+            </tr>
         </tbody>
     </table>
 
