@@ -200,7 +200,7 @@ app.use(morgan('common'));
 
 // GET Requests
 app.get('/', (req, res) => {
-    res.send('TOP 10 ANIME MOVIES. NOT BY WATCHMOJO.');
+    res.send('TOP 10 ANIME MOVIES. NOT BY WATCHMOJO. Just a joke. Welcome to my API!');
 });
 
 // Get all Movies
