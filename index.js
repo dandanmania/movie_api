@@ -165,6 +165,8 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }),
         if(err) {
             console.error(err);
             res.status(500).send('Error: ' + err);
+        } else if(!updatedUser) {
+            res.status(404).send('User does not exist.')
         } else {
             res.json(updatedUser);
         }
