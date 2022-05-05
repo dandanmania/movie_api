@@ -173,19 +173,18 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Delete User
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let queriedUser = Users.findOne({ Username: req.params.username });
-    if (!queriedUser) {
-        res.status(404).send(req.params.username + ' does not exist.');
-    } else {
     Users.findOneAndRemove( { Username: req.params.username })
         .then((user) => {
+            if(!user) {
+                res.status(400).send(req.params.username + ' was not found.')
+            } else {
                 res.status(200).send(req.params.username + ' was deleted.');
-        })
+        }})
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);
         });
-}});
+});
 
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
