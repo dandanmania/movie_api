@@ -24,7 +24,7 @@ module.exports = (router) => {
                 });
             }
             else if (!user) {
-                return res.status(404).json({
+                return res.status(401).json({
                     message: 'Username or password is incorrect.',
                     user: user
                 });
