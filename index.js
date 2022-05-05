@@ -223,7 +223,7 @@ app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { se
             if(!user) {
                 res.status(404).send(req.params.username + ' was not found.')
             }
-            Movies.findOne( { _id: ObjectId('"' + req.params.movieId +'"'} )
+            Movies.findOne( { _id: ObjectId('"' + req.params.movieId +'"') } )
                 .then((movie) => {
                     if(!movie) {
                         res.status(404).send(req.params.movieID + ' was not found.')
