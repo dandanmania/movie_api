@@ -188,16 +188,6 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOne({ Username: req.params.username })
-        .then((user) => {
-            if(!user) {
-            res.status(404).send(req.params.username + ' was not found.')
-            }})
-    Movies.findOne( { _id: req.params.movieID } )
-        .then((movie) => {
-            if(!movie) {
-                res.status(404).send(req.params.movieID + ' was not found.')
-            }})
     Users.findOneAndUpdate( { Username: req.params.username }, {
         $push: { FavoriteMovies: req.params.movieID }
         },
@@ -215,16 +205,6 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
 
 // Delete movie to Favorites
 app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOne({ Username: req.params.username })
-        .then((user) => {
-            if(!user) {
-            res.status(404).send(req.params.username + ' was not found.')
-            }})
-    Movies.findOne( { _id: req.params.movieID } )
-        .then((movie) => {
-            if(!movie) {
-                res.status(404).send(req.params.movieID + ' was not found.')
-            }})
     Users.findOneAndUpdate( { Username: req.params.username }, {
         $pull: { FavoriteMovies: req.params.movieID }
         },
@@ -234,7 +214,7 @@ app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { se
                     console.error(err);
                     res.status(500).send('Error: ' + err);
                 } else {
-                    res.send(req.params.movieID + ' has been added to ' + req.params.username + '\'s Favorites.');
+                    res.send(req.params.movieID + ' has been deleted from ' + req.params.username + '\'s Favorites.');
                 }
         });
     }
