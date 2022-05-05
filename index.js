@@ -188,49 +188,63 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
-    if(!queriedUser) {
-        res.status(404).send(req.params.username + ' was not found.')
-    } else if(!queriedMovie) {
-        res.status(404).send(req.params.movieId + ' was not found.')
-    } else {
-    Users.findOneAndUpdate( { Username: req.params.username }, {
-        $push: { FavoriteMovies: req.params.movieID }
-    },
-    { new: true },
-    (err) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        } else {
-            res.send(req.params.movieID + ' has been added to ' + req.params.username + '\'s Favorites.');
-        }
-    });
-}});
+    Users.findOne({ Username: req.params.username })
+        .then((user) => {
+            if(!user) {
+            res.status(404).send(req.params.username + ' was not found.')
+            } else {
+                Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
+                .then((movie) => {
+                    if(!movie) {
+                        res.status(404).send (req.params.movieID + ' was not found'.)
+                    } else {
+                        Users.findOneAndUpdate( { Username: req.params.username }, {
+                            $push: { FavoriteMovies: req.params.movieID }
+                        },
+                        { new: true },
+                        (err) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(500).send('Error: ' + err);
+                            } else {
+                                res.send(req.params.movieID + ' has been added to ' + req.params.username + '\'s Favorites.');
+                            }
+                        });
+                    }
+                })
+            }
+        })
+});
 
 // Delete movie to Favorites
 app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
-    if(!queriedUser) {
-        res.status(404).send(req.params.username + ' was not found.')
-    } else if(!queriedMovie) {
-        res.status(404).send(req.params.movieId + ' was not found.')
-    } else {
-    Users.findOneAndUpdate( { Username: req.params.username }, {
-        $pull: { FavoriteMovies: req.params.movieID }
-    },
-    { new: true },
-    (err) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send('Error: ' + err);
-        } else {
-            res.send(req.params.movieID + ' has been deleted from ' +  req.params.username + '\'s Favorites.');
-        }
-    });
-}});
+    Users.findOne({ Username: req.params.username })
+        .then((user) => {
+            if(!user) {
+            res.status(404).send(req.params.username + ' was not found.')
+            } else {
+                Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
+                .then((movie) => {
+                    if(!movie) {
+                        res.status(404).send (req.params.movieID + ' was not found'.)
+                    } else {
+                        Users.findOneAndUpdate( { Username: req.params.username }, {
+                            $pull: { FavoriteMovies: req.params.movieID }
+                        },
+                        { new: true },
+                        (err) => {
+                            if (err) {
+                                console.error(err);
+                                res.status(500).send('Error: ' + err);
+                            } else {
+                                res.send(req.params.movieID + ' has been deleted from ' +  req.params.username + '\'s Favorites.');
+                            }
+                        });
+                    }
+                })
+            }
+        })
+});
 
 // Serve documentation file using express static
 app.use(express.static('public'));
