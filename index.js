@@ -173,7 +173,7 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Delete User
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    let queriedUser = Users.findOne( { Username: req.params.username });
+    let queriedUser = Users.findOne({ Username: req.params.username });
     if (!queriedUser) {
         res.status(404).send(req.params.username + ' does not exist.');
     } else {
@@ -190,7 +190,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { _id: req.params.movieID })
+    let queriedMovie = Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
     if(!queriedUser) {
         res.status(404).send(req.params.username + ' was not found.')
     } else if(!queriedMovie) {
@@ -213,7 +213,7 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
 // Delete movie to Favorites
 app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { _id: req.params.movieID })
+    let queriedMovie = Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
     if(!queriedUser) {
         res.status(404).send(req.params.username + ' was not found.')
     } else if(!queriedMovie) {
