@@ -173,7 +173,8 @@ app.put('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Delete User
 app.delete('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    if (!user) {
+    let queriedUser = Users.findOne( { Username: req.params.username });
+    if (!queriedUser) {
         res.status(404).send(req.params.username + ' does not exist.');
     } else {
     Users.findOneAndRemove( { Username: req.params.username })
