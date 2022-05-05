@@ -20,7 +20,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //CORS
 app.use(cors());
 
-//mongoose.connect('mongodb://localhost:27017/myFlixDB', { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Importing Auth
@@ -43,14 +42,17 @@ app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) 
         console.error(error);
         res.status(500).send('Error: ' + error);
     });
-    //res.status(200).json(movies);
 });
 
 // Find movie by Title
 app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ Title: req.params.title })
         .then((movie) => {
-            res.json(movie)
+            if(!movie) {
+                res.status(404).send(req.params.title + ' does not exist.');
+            } else(
+                res.json(movie)
+            )
         })
         .catch((err) => {
             console.error(err);
@@ -62,7 +64,11 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
 app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.findOne({ Name: req.params.genreName })
         .then((genre) => {
-            res.json(genre)
+            if(!genre) {
+                res.status(404).send(req.params.genreName + ' does not exist.');
+            } else(
+                res.json(genre)
+            )
         })
         .catch((err) => {
             console.error(err);
@@ -74,8 +80,11 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: fals
 app.get('/movies/directors/:directorName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Directors.findOne({ Name: req.params.directorName })
         .then((director) => {
-            res.json(director)
-        })
+            if(!director) {
+                res.status(404).send(req.params.directorName + ' does not exist.');
+            } else(
+                res.json(director)
+            )
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);
@@ -166,7 +175,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
     Users.findOneAndRemove( { Username: req.params.username })
         .then((user) => {
             if (!user) {
-                res.status(400).send(req.params.username + ' was not found.');
+                res.status(404).send(req.params.username + ' does not exist.');
             } else {
                 res.status(200).send(req.params.username + ' was deleted.');
             }
@@ -179,6 +188,13 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+    let queriedUser = Users.findOne( { Username: req.params.username })
+    let queriedMovie = Movies.findOne( { Title: req.params.movieID })
+    if(!queriedUser) {
+        res.status(404).send(req.params.username + ' was not found.')
+    } else if(!queriedMovie) {
+        res.status(404).send(req.params.movieId + ' was not found.')
+    } else {
     Users.findOneAndUpdate( { Username: req.params.username }, {
         $push: { FavoriteMovies: req.params.movieID }
     },
@@ -191,10 +207,17 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
             res.send(req.params.movieID + ' has been added to ' + req.params.username + '\'s Favorites.');
         }
     });
-});
+}});
 
 // Delete movie to Favorites
 app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+    let queriedUser = Users.findOne( { Username: req.params.username })
+    let queriedMovie = Movies.findOne( { Title: req.params.movieID })
+    if(!queriedUser) {
+        res.status(404).send(req.params.username + ' was not found.')
+    } else if(!queriedMovie) {
+        res.status(404).send(req.params.movieId + ' was not found.')
+    } else {
     Users.findOneAndUpdate( { Username: req.params.username }, {
         $pull: { FavoriteMovies: req.params.movieID }
     },
@@ -207,7 +230,7 @@ app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { se
             res.send(req.params.movieID + ' has been deleted from ' +  req.params.username + '\'s Favorites.');
         }
     });
-});
+}});
 
 // Serve documentation file using express static
 app.use(express.static('public'));
