@@ -189,7 +189,7 @@ app.delete('/users/:username', passport.authenticate('jwt', { session: false }),
 // Add movie to Favorites
 app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { Title: req.params.movieID })
+    let queriedMovie = Movies.findOne( { _id: req.params.movieID })
     if(!queriedUser) {
         res.status(404).send(req.params.username + ' was not found.')
     } else if(!queriedMovie) {
@@ -212,7 +212,7 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
 // Delete movie to Favorites
 app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     let queriedUser = Users.findOne( { Username: req.params.username })
-    let queriedMovie = Movies.findOne( { Title: req.params.movieID })
+    let queriedMovie = Movies.findOne( { _id: req.params.movieID })
     if(!queriedUser) {
         res.status(404).send(req.params.username + ' was not found.')
     } else if(!queriedMovie) {
