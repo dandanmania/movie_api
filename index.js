@@ -193,7 +193,7 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
             if(!user) {
             res.status(404).send(req.params.username + ' was not found.')
             }
-            let movieIdentifier = 'ObjectId(' + req.params.movieID + ')';
+            let movieIdentifier = ObjectId('"'+ req.params.movieID + '"');
             Movies.findOne( { _id: movieIdentifier } )
                 .then((movie) => {
                     if(!movie) {
@@ -224,7 +224,7 @@ app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { se
             if(!user) {
                 res.status(404).send(req.params.username + ' was not found.')
             }
-            let movieIdentifier = 'ObjectId(' + req.params.movieID + ')';
+            let movieIdentifier = ObjectId('"'+ req.params.movieID + '"');
             Movies.findOne( { _id: movieIdentifier } )
                 .then((movie) => {
                     if(!movie) {
