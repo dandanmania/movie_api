@@ -199,9 +199,7 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
                     console.error(err);
                     res.status(500).send('Error: ' + err);
                 } else if(!updatedUser) {
-                    res.status(404).send('User not found.');
-                } else if(Movies.findOne( { _id: req.params.movieID } ) == null) {
-                    res.status(404).send('Movie not found.')
+                    res.status(404).send('User not found');
                 } else {
                     res.send(req.params.movieID + ' has been added to ' + req.params.username + '\'s Favorites.');
                 }
