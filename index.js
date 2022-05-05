@@ -196,7 +196,7 @@ app.post('/users/:username/movies/:movieID', passport.authenticate('jwt', { sess
                 Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
                 .then((movie) => {
                     if(!movie) {
-                        res.status(404).send (req.params.movieID + ' was not found'.)
+                        res.status(404).send(req.params.movieID + ' was not found.')
                     } else {
                         Users.findOneAndUpdate( { Username: req.params.username }, {
                             $push: { FavoriteMovies: req.params.movieID }
@@ -226,7 +226,7 @@ app.delete('/users/:username/movies/:movieID', passport.authenticate('jwt', { se
                 Movies.findOne( { _id: 'ObjectID' + req.params.movieID + ')' } )
                 .then((movie) => {
                     if(!movie) {
-                        res.status(404).send (req.params.movieID + ' was not found'.)
+                        res.status(404).send(req.params.movieID + ' was not found.')
                     } else {
                         Users.findOneAndUpdate( { Username: req.params.username }, {
                             $pull: { FavoriteMovies: req.params.movieID }
