@@ -61,7 +61,7 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
 });
 
 // Get All Genre Data
-app.get('/movies/genre', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/genre', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.find()
         .then((genres) => res.json(genres))
         .catch((err) => {
@@ -71,7 +71,7 @@ app.get('/movies/genre', passport.authenticate('jwt', { session: false }), (req,
 });
 
 // Get Genre Data by Genre Name
-app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.findOne({ Name: req.params.genreName })
         .then((genre) => {
             if(!genre) {
@@ -87,7 +87,7 @@ app.get('/movies/genre/:genreName', passport.authenticate('jwt', { session: fals
 });
 
 // Get All Directors
-app.get('/movies/directors', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('directors', passport.authenticate('jwt', { session: false }), (req, res) => {
     Directors.find()
         .then((directors) => res.json(directors))
         .catch((err) => {
@@ -97,7 +97,7 @@ app.get('/movies/directors', passport.authenticate('jwt', { session: false }), (
 });
 
 // Get Director Data by Name
-app.get('/movies/directors/:directorName', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/directors/:directorName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Directors.findOne({ Name: req.params.directorName })
         .then((director) => {
             if(!director) {
