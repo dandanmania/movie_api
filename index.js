@@ -71,7 +71,7 @@ app.get('/genre', passport.authenticate('jwt', { session: false }), (req, res) =
 });
 
 // Get Genre Data by Genre Name
-app.get('genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/genre/:genreName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.findOne({ Name: req.params.genreName })
         .then((genre) => {
             if(!genre) {
@@ -87,9 +87,9 @@ app.get('genre/:genreName', passport.authenticate('jwt', { session: false }), (r
 });
 
 // Get All Directors
-app.get('directors', passport.authenticate('jwt', { session: false }), (req, res) => {
+app.get('/directors', passport.authenticate('jwt', { session: false }), (req, res) => {
     Directors.find()
-        .then((directors) => res.json(directors))
+        .then((director) => res.json(director))
         .catch((err) => {
             console.error(err);
             res.status(500).send('Error: ' + err);
