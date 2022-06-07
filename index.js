@@ -117,6 +117,23 @@ app.get('/documentation', (req, res) => {
     res.sendFile('public/documentation.html', { root: __dirname });
 });
 
+// Get User by Username
+
+app.get('/users/:username', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Users.findOne({ Username : req.params.username })
+        .then((user) => {
+            if(!user) {
+                res.status(404).send(req.params.username + ' does not exist.');
+            } else {
+                res.json(user)
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
 // Create New Users
 app.post('/users',
     [
