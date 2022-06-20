@@ -60,6 +60,22 @@ app.get('/movies/:title', passport.authenticate('jwt', { session: false }), (req
         });
 });
 
+// Find movie by ID
+app.get('/movies/:movieId', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movies.findOne({ Title: req.params.movieId })
+        .then((movie) => {
+            if(!movie) {
+                res.status(404).send(req.params.movieId + ' does not exist/is not valid.');
+            } else{
+                res.json(movie)
+            }
+        })
+        .catch((err) => {
+            console.error(err);
+            res.status(500).send('Error: ' + err);
+        });
+});
+
 // Get All Genre Data
 app.get('/genre', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.find()
